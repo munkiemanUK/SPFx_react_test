@@ -6,10 +6,16 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
+import {
+  SPHttpClient,
+  SPHttpClientResponse
+} from '@microsoft/sp-http';
 import * as strings from 'ReactTestWebPartStrings';
+
 import ReactTest from './components/ReactTest';
 import { IReactTestProps } from './components/IReactTestProps';
+import { AadTokenProvider } from '@microsoft/sp-http';
+import { Providers, SharePointProvider, MgtPerson} from '@microsoft/mgt';
 
 export interface IReactTestWebPartProps {
   description: string;
@@ -17,7 +23,7 @@ export interface IReactTestWebPartProps {
 
 export default class ReactTestWebPart extends BaseClientSideWebPart<IReactTestWebPartProps> {
 
-  public render(): void {
+  public render(): void { 
     const element: React.ReactElement<IReactTestProps> = React.createElement(
       ReactTest,
       {
