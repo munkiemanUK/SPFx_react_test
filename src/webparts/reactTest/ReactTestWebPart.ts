@@ -16,6 +16,7 @@ import ReactTest from './components/ReactTest';
 import { IReactTestProps } from './components/IReactTestProps';
 import { AadTokenProvider } from '@microsoft/sp-http';
 import { Providers, SharePointProvider, MgtPerson} from '@microsoft/mgt';
+import { MSGraphClient } from '@microsoft/sp-http';
 
 export interface IReactTestWebPartProps {
   description: string;
@@ -24,14 +25,17 @@ export interface IReactTestWebPartProps {
 export default class ReactTestWebPart extends BaseClientSideWebPart<IReactTestWebPartProps> {
 
   public render(): void { 
-    const element: React.ReactElement<IReactTestProps> = React.createElement(
-      ReactTest,
-      {
-        description: this.properties.description
-      }
-    );
-
-    ReactDom.render(element, this.domElement);
+    this.context.msGraphClientFactory.getClient()
+    .then((client: MSGraphClient): void => {   
+      const element: React.ReactElement<IReactTestProps> = React.createElement(
+        ReactTest,
+        {
+          description: this.properties.description,
+          graphClient: client
+        }
+      );
+      ReactDom.render(element, this.domElement);
+    });
   }
 
   protected onDispose(): void {
